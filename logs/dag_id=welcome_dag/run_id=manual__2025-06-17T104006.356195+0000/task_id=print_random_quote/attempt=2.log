@@ -1,0 +1,4 @@
+{"timestamp":"2025-06-17T10:51:49.540870","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager"}
+{"timestamp":"2025-06-17T10:51:49.541443","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/welcome_dag.py","logger":"airflow.models.dagbag.DagBag"}
+{"timestamp":"2025-06-17T10:51:50.042484Z","level":"info","event":"Failed to fetch quote: HTTPSConnectionPool(host='api.quotable.io', port=443): Max retries exceeded with url: /random (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1010)')))","chan":"stdout","logger":"task"}
+{"timestamp":"2025-06-17T10:51:50.043229","level":"info","event":"Done. Returned value was: None","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator"}
