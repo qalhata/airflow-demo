@@ -4,7 +4,7 @@ from airflow.operators.bash import BashOperator
 from airflow.operators.email import EmailOperator
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
-from plugins.clean_data import clean_data
+from clean_data import clean_data # Assuming clean_data.py is directly in the plugins folder
 
 # Define or Instantiate DAG
 dag = DAG(
@@ -32,7 +32,7 @@ clean_data_task = PythonOperator(
 
 send_email_task = EmailOperator(
     task_id='send_email',
-    to="{{ var.value.get('support_email') }}", # Use the support_email variable
+    to="{{ var.value.get('support_email', 'default-support@example.com') }}", # Use the support_email variable with a fallback
     subject='Exchange Rate Download - Successful',
     html_content='The Exchange Rate data has been successfully downloaded, cleaned, and loaded.',
     dag=dag,
