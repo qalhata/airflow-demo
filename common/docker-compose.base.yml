@@ -1,0 +1,119 @@
+---
+# Common settings for Airflow services
+x-airflow-common:
+  &airflow-common
+  # Build the image from the Dockerfile in the current directory (.)
+  build: .
+  image: custom-airflow:demo # Name for the image built by Docker Compose
+  environment:
+    &airflow-common-env
+    # Core Airflow Settings
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}
+    # Generate a new Fernet key for production or use the one from your airflow.cfg
+    # For example, using the one from your provided airflow.cfg:
+    AIRFLOW__CORE__FERNET_KEY: '${FERNET_KEY}'
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'true' # Set to 'false' if you don't want example DAGs    
+    # API Authentication (using basic_auth for simplicity in dev/training)
+    # AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth' # Temporarily commented out
+    # SMTP Settings are now managed via the 'smtp_default' connection in the Airflow UI
+    # to connect to an external service like Gmail. The environment variables below are commented out
+    # to avoid conflicts.
+    # AIRFLOW__SMTP__SMTP_HOST: ...
+    # AIRFLOW__SMTP__SMTP_PORT: ...
+    # AIRFLOW__SMTP__SMTP_MAIL_FROM: ...
+    AIRFLOW__EMAIL__EMAIL_BACKEND: airflow.utils.email.send_email_smtp
+    # Set AIRFLOW_UID to the user ID your host machine uses for the mounted directories
+    # to avoid permission issues. 50000 is the default airflow user in the image.
+    # On Windows with Docker Desktop, this might not be strictly necessary, but good practice.
+    # You can also create a .env file and set AIRFLOW_UID=${UID:-50000}
+    AIRFLOW_UID: ${AIRFLOW_UID:-50000}
+  volumes:
+    # Mount specific directories instead of the whole ./airflow
+    - ./airflow/dags:/opt/airflow/dags
+    - ./airflow/logs:/opt/airflow/logs
+    - ./airflow/plugins:/opt/airflow/plugins
+    - ./airflow/files:/opt/airflow/files
+    # If you have custom configurations in airflow.cfg not covered by ENV VARS,
+    # you can mount it:
+    # - ./airflow/airflow.cfg:/opt/airflow/airflow.cfg
+  depends_on:
+    postgres:
+      condition: service_healthy
+    # The local SMTP service is disabled, so this dependency is removed.
+    # elm-smtp:
+    #   condition: service_started
+  healthcheck:
+    test: ["CMD", "airflow", "healthcheck"]
+    interval: 10s
+    timeout: 10s
+    retries: 5
+
+services:
+  # Airflow Webserver Service
+  airflow-webserver: # Renamed from 'airflow'
+    <<: *airflow-common # Extends common Airflow settings
+    command: webserver # Run the web UI server
+    environment:
+      <<: *airflow-common-env
+      # These variables are specific to the webserver and should not be in the common block
+      _AIRFLOW_DB_MIGRATE: 'true'
+      _AIRFLOW_WWW_USER_CREATE: 'true'
+      _AIRFLOW_WWW_USER_USERNAME: 'admin'
+      _AIRFLOW_WWW_USER_PASSWORD: '${AIRFLOW_WWW_USER_PASSWORD}'
+    ports:
+      - "8080:8080"
+    restart: always
+
+  # Airflow Scheduler Service
+  airflow-scheduler: # New service for the scheduler
+    <<: *airflow-common
+    command: scheduler # Run only the scheduler
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+  
+  # The local SMTP server is commented out to allow the use of an external SMTP service (e.g., Gmail)
+  # configured via the Airflow UI.
+  # demo-smtp:
+  #   image: bytemark/smtp:latest
+  #   restart: always
+  #   ports: # Optional: expose port if you need to connect from host for testing
+  #     - "2525:25"
+
+  # PostgreSQL Database Service
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 5s
+
+  # PgAdmin Service for managing PostgreSQL
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:latest
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "5050:80"
+    depends_on: # pgAdmin should wait for postgres
+      - postgres
+
+volumes:
+  postgres-db-volume: # Defines the named volume for PostgreSQL data persistence
