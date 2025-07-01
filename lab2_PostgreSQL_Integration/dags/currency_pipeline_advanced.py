@@ -10,15 +10,27 @@ def currency_pipeline_advanced():
 
     @task()
     def fetch_data():
-        url = 'https://api.exchangerate.host/latest'
+        url = 'https://open.er-api.com/v6/latest'
         response = requests.get(url)
         data = response.json()
         df = pd.DataFrame.from_dict(data['rates'], orient='index', columns=['rate'])
         df['currency'] = df.index
         df.reset_index(drop=True, inplace=True)
-        df['timestamp'] = datetime.now()
+        df['timestamp'] = datetime.now().isoformat()
         df.to_csv('/opt/airflow/data/output.csv', index=False)
         return df.to_dict(orient='records')
+
+    @task()
+    def create_table_if_not_exists():
+        pg_hook = PostgresHook(postgres_conn_id='pg_conn')
+        create_sql = """
+        CREATE TABLE IF NOT EXISTS exchange_rates(
+            currency TEXT,
+            rate NUMERIC,
+            timestamp TIMESTAMP
+        );
+        """
+        pg_hook.run(create_sql)
 
     @task()
     def load_to_postgres(records):
@@ -30,6 +42,9 @@ def currency_pipeline_advanced():
         for row in records:
             pg_hook.run(insert_sql, parameters=row)
 
-    load_to_postgres(fetch_data())
+    # ✅ Correct chaining with variable assignment
+    records = fetch_data()
+    create = create_table_if_not_exists()
+    create >> load_to_postgres(records)
 
 currency_pipeline_advanced()
