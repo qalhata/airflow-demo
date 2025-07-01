@@ -1,0 +1,17 @@
+services:
+  airflow-webserver:
+    volumes:
+      - ../lab2_PostgreSQL_Integration/dags:/opt/airflow/dags
+      - ../lab2_PostgreSQL_Integration/logs:/opt/airflow/logs
+      - ../lab2_PostgreSQL_Integration/sql:/opt/airflow/sql
+      - ../lab2_PostgreSQL_Integration/data:/opt/airflow/data
+
+  airflow-scheduler:
+    volumes:
+      - ../lab2_PostgreSQL_Integration/dags:/opt/airflow/dags
+      - ../lab2_PostgreSQL_Integration/logs:/opt/airflow/logs
+      - ../lab2_PostgreSQL_Integration/sql:/opt/airflow/sql
+      - ../lab2_PostgreSQL_Integration/data:/opt/airflow/data
+
+volumes:
+  pgdata:

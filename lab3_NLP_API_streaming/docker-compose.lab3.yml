@@ -1,0 +1,21 @@
+services:
+  airflow-webserver:
+    volumes:
+      - ../lab3_NLP_API_streaming/dags:/opt/airflow/dags
+      - ../lab3_NLP_API_streaming/data:/opt/airflow/data
+      - ../lab3_NLP_API_streaming/logs:/opt/airflow/logs
+      - ../lab3_NLP_API_streaming/sql:/opt/airflow/sql
+
+  airflow-scheduler:
+    volumes:
+      - ../lab3_NLP_API_streaming/dags:/opt/airflow/dags
+      - ../lab3_NLP_API_streaming/data:/opt/airflow/data
+      - ../lab3_NLP_API_streaming/logs:/opt/airflow/logs
+      - ../lab3_NLP_API_streaming/sql:/opt/airflow/sql
+
+  nlp-api:
+    build:
+      context: ../lab3_NLP_API_streaming/app
+    ports:
+      - "5000:5000"
+    restart: always

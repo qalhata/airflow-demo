@@ -3,7 +3,7 @@
 x-airflow-common:
   &airflow-common
   # Build the image from the Dockerfile in the current directory (.)
-  build: .
+  # build: .
   image: custom-airflow:demo # Name for the image built by Docker Compose
   environment:
     &airflow-common-env
@@ -29,12 +29,12 @@ x-airflow-common:
     # On Windows with Docker Desktop, this might not be strictly necessary, but good practice.
     # You can also create a .env file and set AIRFLOW_UID=${UID:-50000}
     AIRFLOW_UID: ${AIRFLOW_UID:-50000}
-  volumes:
+  # volumes:
     # Mount specific directories instead of the whole ./airflow
-    - ./airflow/dags:/opt/airflow/dags
-    - ./airflow/logs:/opt/airflow/logs
-    - ./airflow/plugins:/opt/airflow/plugins
-    - ./airflow/files:/opt/airflow/files
+    # - ./airflow/dags:/opt/airflow/dags
+    # - ./airflow/logs:/opt/airflow/logs
+    # - ./airflow/plugins:/opt/airflow/plugins
+    # - ./airflow/files:/opt/airflow/files
     # If you have custom configurations in airflow.cfg not covered by ENV VARS,
     # you can mount it:
     # - ./airflow/airflow.cfg:/opt/airflow/airflow.cfg

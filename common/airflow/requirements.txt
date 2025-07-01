@@ -1,0 +1,5 @@
+apache-airflow-providers-github==2.6.1
+requests
+huggingface-hub
+pandas
+apache-airflow-providers-postgres

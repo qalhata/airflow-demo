@@ -1,0 +1,14 @@
+services:
+  airflow-webserver:
+    volumes:
+      - ../lab1_airflow_exchange_rate/dags:/opt/airflow/dags
+      - ../lab1_airflow_exchange_rate/logs:/opt/airflow/logs
+      - ../lab1_airflow_exchange_rate/plugins:/opt/airflow/plugins
+      - ../lab1_airflow_exchange_rate/files:/opt/airflow/files
+
+  airflow-scheduler:
+    volumes:
+      - ../lab1_airflow_exchange_rate/dags:/opt/airflow/dags
+      - ../lab1_airflow_exchange_rate/logs:/opt/airflow/logs
+      - ../lab1_airflow_exchange_rate/plugins:/opt/airflow/plugins
+      - ../lab1_airflow_exchange_rate/files:/opt/airflow/files
