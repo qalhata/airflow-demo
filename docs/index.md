@@ -57,6 +57,6 @@ docker compose -f common/docker-compose.base.yml -f lab1_airflow_exchange_rate/d
 ```
 
 ## 🚀 Essential Resources(Reading Material)
-[text](https://airflow.apache.org/docs/)
-[text](https://docs.docker.com/compose/)
-[text](https://fastapi.tiangolo.com/)
+[Apache Airflow Docs](https://airflow.apache.org/docs/)
+[Docker Compose](https://docs.docker.com/compose/)
+[FastAPI](https://fastapi.tiangolo.com/)
