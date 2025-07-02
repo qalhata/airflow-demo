@@ -76,18 +76,18 @@ docker compose -f common/docker-compose.base.yml -f labX/docker-compose.labX.yml
 
 # How to run each Lab
 
-# Step 1: Build & Start the Stack
+## Step 1: Build & Start the Stack
 
-## LAB 1: Airflow fetch pipeline
+### LAB 1: Airflow fetch pipeline
 docker compose -f common/docker-compose.base.yml -f lab1_airflow_exchange_rate/docker-compose.lab1.yml up --build --force-recreate --no-cache
 
-## LAB 2: PostgreSQL DAGs
+### LAB 2: PostgreSQL DAGs
 docker compose -f common/docker-compose.base.yml -f lab2_PostgreSQL_Integration/docker-compose.lab2.yml up --build --force-recreate --no-cache
 
-## LAB 3: NLP API + AI Streaming
+### LAB 3: NLP API + AI Streaming
 docker compose -f common/docker-compose.base.yml -f lab3_NLP_API_streaming/docker-compose.lab3.yml up --build --force-recreate --no-cache
 
-# Step 2: Access UIs
+## Step 2: Access UIs
 
     🧠 Airflow → http://localhost:8080
     Login: airflow / airflow
@@ -95,17 +95,6 @@ docker compose -f common/docker-compose.base.yml -f lab3_NLP_API_streaming/docke
     🐘 pgAdmin → http://localhost:5050
     Login: admin@admin.com / admin
     Server host: postgres, DB: airflow
-
-##💡 Learning Keywords
-
-    | Area          | Keywords                                              |
-| ------------- | ----------------------------------------------------- |
-| Orchestration | DAGs, scheduling, retries, decorators                 |
-| Databases     | PostgreSQL, SQL hooks, pgAdmin                        |
-| APIs          | Flask, FastAPI, REST, JSON                            |
-| Architecture  | ETL/ELT, OLTP vs OLAP                                 |
-| DevOps        | Docker Compose, modular environments                  |
-| Advanced      | Concurrency, parallelism, async, enrichment pipelines |
 
 ## 🛠️ Suggested Extensions
 
