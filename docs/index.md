@@ -1,7 +1,7 @@
 # 💡 Airflow Demo Labs: Data Engineering at Enterprise Scale
 
 Welcome to the documentation for the **Airflow Demo Labs**. 
-This site is automatically built using GitHub Pages and reflects all available labs in this repository.
+This site is automatically built using GitHub Pages and reflects all available labs in [this repository](https://github.com/qalhata/airflow-demo).
 
 ---
 
