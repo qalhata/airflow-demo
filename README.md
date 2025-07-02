@@ -49,6 +49,8 @@ This multi-lab setup simulates real-world engineering roles—complete with ETL 
 - 🔥 **Flask / FastAPI** — Lightweight APIs for AI enrichment  
 - 🐳 **Docker Compose (modular)** — Environment automation
 
+---
+
 ```bash
 # Core Docker command to run any lab
 docker compose -f common/docker-compose.base.yml -f labX/docker-compose.labX.yml up --build --force-recreate --no-cache
@@ -70,6 +72,8 @@ docker compose -f common/docker-compose.base.yml -f labX/docker-compose.labX.yml
 │   ├── docker-compose.lab3.yml
 └── README.md
 
+
+## 🧰 Technologies Used
 ## How to run each Lab
 
 🔹 Step 1: Build & Start the Stack
@@ -104,6 +108,9 @@ docker compose -f common/docker-compose.base.yml -f lab3_NLP_API_streaming/docke
 | DevOps        | Docker Compose, modular environments                  |
 | Advanced      | Concurrency, parallelism, async, enrichment pipelines |
 
+
+---
+
 ## 🛠️ Suggested Extensions
 
     ✅ Add Great Expectations for validation
@@ -116,7 +123,7 @@ docker compose -f common/docker-compose.base.yml -f lab3_NLP_API_streaming/docke
 
     🧪 Benchmark FastAPI vs Flask under load
 
-
+---
 ## 📘 Final Notes
 
     All DAGs are located under dags/
