@@ -16,6 +16,7 @@ services:
   nlp-api:
     build:
       context: ../lab3_NLP_API_streaming/app
+      dockerfile: Dockerfile
     ports:
       - "5000:5000"
     restart: always
